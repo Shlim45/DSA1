@@ -1,19 +1,19 @@
 #include "Sort.h"
 
-void Sort::Merge(int *numbers, int i, int j, int k)
+void Sort::Merge(int *numbers, int start, int mid, int end)
 {
-	int mergedSize = k - i + 1;
+	int mergedSize = end - start + 1;
 	int mergePos = 0, 
 		leftPos = 0, 
 		rightPos = 0;
 
 	int *mergedNumbers = new int[mergedSize];
 
-	leftPos = i;
-	rightPos = j + 1;
+	leftPos = start;
+	rightPos = mid + 1;
 
 	// Add smallest element from L or R partition to merged numbers
-	while (leftPos <= j && rightPos <= k)
+	while (leftPos <= mid && rightPos <= end)
 	{
 		if (numbers[leftPos] <= numbers[rightPos])
 		{
@@ -29,7 +29,7 @@ void Sort::Merge(int *numbers, int i, int j, int k)
 	}
 
 	// If L partition is not empty, add remaining elements to merged numbers
-	while (leftPos <= j)
+	while (leftPos <= mid)
 	{
 		mergedNumbers[mergePos] = numbers[leftPos];
 		++leftPos;
@@ -37,7 +37,7 @@ void Sort::Merge(int *numbers, int i, int j, int k)
 	}
 
 	// Repeat for R partition
-	while (rightPos <= k)
+	while (rightPos <= end)
 	{
 		mergedNumbers[mergePos] = numbers[rightPos];
 		++rightPos;
@@ -47,25 +47,25 @@ void Sort::Merge(int *numbers, int i, int j, int k)
 	// Copy merge number back to numbers
 	for (mergePos = 0; mergePos < mergedSize; ++mergePos)
 	{
-		numbers[i + mergePos] = mergedNumbers[mergePos];
+		numbers[start + mergePos] = mergedNumbers[mergePos];
 	}
 }
 
-void Sort::MergeSort(int *numbers, int i, int k)
+void Sort::MergeSort(int *numbers, int start, int end)
 {
-	int j = 0;
+	int mid = 0;
 
-	if (i < k)
+	if (start < end)
 	{
-		j = (i + k) / 2;	// find midpoint
+		mid = (start + end) / 2;	// find midpoint
 	}
-	else if (i == k)
+	else if (start == end)
 		return;
 
 	// Recursively sort L and R partitions
-	MergeSort(numbers, i, j);
-	MergeSort(numbers, j + 1, k);
+	MergeSort(numbers, start, mid);
+	MergeSort(numbers, mid + 1, end);
 
 	// Merge L and R partitions in sorted order
-	Merge(numbers, i, j, k);
+	Merge(numbers, start, mid, end);
 }
